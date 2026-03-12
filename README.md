@@ -1,17 +1,32 @@
-# smart_event_flow
+# 🛰️ Smart Event Flow
 
-A new Flutter project.
+Додаток для моніторингу масових заходів та управління станом локацій через IoT-систему.
 
-## Getting Started
+### 🎯 Що робить
 
-This project is a starting point for a Flutter application.
+Система збирає дані з сенсорів та візуалізує їх у зручному дашборді:
 
-A few resources to get you started if this is your first Flutter project:
+* **Live Monitoring:** черги на вході, рівень шуму на сцені, заповненість залів.
+* **Smart Air:** контроль якості повітря (CO2) для комфорту відвідувачів.
+* **AI Analytics:** аналіз настрою аудиторії та демографії (стать/кількість).
+* **Alert System:** сповіщення про критичні ситуації (включаючи "канапковий моніторинг" у трапезній).
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### 📱 Екрани та UX
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* **Auth:** реєстрація та логін (з обробкою overflow при повороті екрана).
+* **Dashboard:** головна панель з градієнтною шапкою та Hover-ефектами на картках.
+* **Analytics:** детальна статистика кожної зони з прогрес-барами заповненості.
+* **Profile:** кастомний профіль адміністратора зі статистикою датчиків.
+
+### 🛠 Технічні деталі
+
+* **Framework:** Flutter (Material 3).
+* **Architecture:** Component-based (reusable widgets).
+* **UI/UX:** Адаптивна верстка, анімований Hover, кастомна палітра кольорів.
+
+### 📂 Структура
+
+* `lib/screens/` — логіка екранів.
+* `lib/widgets/` — перевживані компоненти (EventCard, Input, Button).
+* `lib/main.dart` — конфігурація та маршрути.
+
