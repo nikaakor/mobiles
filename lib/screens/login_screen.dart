@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; 
 import 'package:connectivity_plus/connectivity_plus.dart'; 
 import '../data/sp_auth_repository.dart';
-// import '../models/user_model.dart';
+import '../logic/user_cubit.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,23 +29,20 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Будь ласка, заповніть усі поля')),
-      );
+      _showSnackBar('Будь ласка, заповніть усі поля');
       return;
     }
 
+    // ВИПРАВЛЕНО: Connectivity у версії 5.x/6.x повертає List або один об'єкт
     final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Відсутній інтернет! Перевірте з’єднання.'),
-          backgroundColor: Colors.orange,
-        ),
-      );
+    
+    // Перевірка для версії 5.0.2 (яку ми поставили)
+    if (connectivityResult == ConnectivityResult.none) {
+      _showSnackBar('Відсутній інтернет! Перевірте з’єднання.', isError: true);
       return;
     }
 
+    if (!mounted) return;
     setState(() => _isLoading = true);
 
     try {
@@ -52,19 +50,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (mounted) {
         if (user != null) {
+          context.read<UserCubit>().loadUser(); 
           Navigator.pushReplacementNamed(context, '/home');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Невірний email або пароль'),
-              backgroundColor: Colors.redAccent,
-            ),
-          );
+          _showSnackBar('Невірний email або пароль', isError: true);
         }
       }
+    } catch (e) {
+      _showSnackBar('Помилка входу: $e', isError: true);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.redAccent : Colors.orange,
+      ),
+    );
   }
 
   @override
@@ -123,29 +128,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: _isLoading ? null : _handleLogin,
                   child: _isLoading
                       ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
+                          height: 20, width: 20,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                         )
                       : const Text(
                           "Увійти",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                 ),
                 const SizedBox(height: 15),
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/register'),
-                  child: const Text(
-                    "Немає акаунту? Реєстрація",
-                    style: TextStyle(color: Colors.blueGrey),
-                  ),
+                  child: const Text("Немає акаунту? Реєстрація", style: TextStyle(color: Colors.blueGrey)),
                 ),
               ],
             ),

@@ -7,6 +7,11 @@ class SharedPreferencesAuthRepository implements AuthRepository {
   static const String _usersListKey = 'users_list';
   static const String _currentUserKey = 'current_user';
 
+  Future<void> deleteAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   @override
   Future<bool> registerUser(UserModel user) async {
     final sp = await SharedPreferences.getInstance();
