@@ -1,58 +1,17 @@
+# smart_event_new
 
+A new Flutter project.
 
-# 🚀 Smart Event Flow: API & Database Integration
+## Getting Started
 
-**Smart Event Flow** еволюціонував! У п'ятій лабораторній роботі додаток отримав повноцінний зв'язок із зовнішнім світом через REST API та систему розумного кешування даних.
+This project is a starting point for a Flutter application.
 
-## 📋 Лабораторна робота №5: Мережева взаємодія та синхронізація
+A few resources to get you started if this is your first Flutter project:
 
-У цій ітерації реалізовано клієнт-серверну архітектуру. Додаток тепер не просто зберігає дані локально, а синхронізується з бекендом у реальному часі.
+- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
+- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
 
-### ✨ Реалізований функціонал:
-
-* **REST API Інтеграція:** Повноцінна взаємодія з сервером (Flask/Python) для отримання та керування розкладом подій.
-* **Динамічний Розклад (CRUD через API):**
-    * **Create:** Додавання нових подій у спільну базу даних через POST-запити.
-    * **Read:** Відображення актуального списку подій за допомогою `FutureBuilder`.
-    * **Delete:** Видалення застарілих або помилкових подій з сервера.
-* **Розумне Кешування (Offline Mode):** Додаток автоматично зберігає останню копію розкладу в `SharedPreferences`. Якщо сервер недоступний або зник інтернет, користувач все одно бачить актуальні дані.
-* **Синхронізація Даних:** Автоматичне сортування подій за часом (`startTime`) та валідація JSON-відповідей сервера.
-* **MQTT Моніторинг:** Паралельна робота з IoT-датчиками (температура, вхід, трапезна) через протокол MQTT.
-
----
-
-### 🏗 Архітектура проекту (Network Layer)
-
-Проєкт дотримується принципу **Single Responsibility** та **Repository Pattern**, що дозволило вкластися у ліміт 150 рядків коду на файл:
-
-* **Server (`/lib/server/`):** Бекенд на **Flask (Python)** з базою даних **SQLite**. Реалізовано обробку CORS для стабільної роботи веб-версії та мобільних пристроїв.
-* **Models (`/lib/models/`):** Розширена модель `ScheduleItem` з підтримкою різних форматів іменування полів (`camelCase` та `snake_case`) для максимальної стабільності.
-* **Data (`/lib/data/`):** `ScheduleRepository` — серце мережевої логіки. Виконує HTTP-запити та керує локальним кешем.
-* **Widgets (`/lib/widgets/home/`):** Використання `FutureBuilder` для асинхронного завантаження даних та преміальний UI-дизайн карток подій.
-
----
-
-### 🛠 Технологічний стек:
-
-* **Frontend:** Flutter 3.33+
-* **Backend:** Python (Flask), Flask-CORS
-* **Database:** SQLite (SQL-запити, індексація)
-* **Networking:** `http` package, JSON serialization
-* **Local Cache:** `shared_preferences`
-
----
-
-### 🚀 Як запустити систему:
-
-1.  **Запуск Сервера (Backend):**
-    ```bash
-    cd lib/server
-    pip install flask flask-cors
-    python3 app.py
-    ```
-2.  **Запуск Додатка (Frontend):**
-    ```bash
-    flutter pub get
-    flutter run
-    ```
-
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

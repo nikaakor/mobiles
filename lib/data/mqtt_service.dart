@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_browser_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart'; 
 import 'package:flutter/foundation.dart';
 
 class MqttService extends ChangeNotifier {
-  MqttBrowserClient? client;
+  MqttServerClient? client; 
   
   String crowdCount = "0";
   String temperature = "20.0";
@@ -22,13 +22,14 @@ class MqttService extends ChangeNotifier {
   Stream<String> get foodStream => _foodController.stream;
 
   Future<bool> connect() async {
-    client = MqttBrowserClient(
-      'ws://broker.emqx.io/mqtt',
-      'nika_client_${DateTime.now().millisecondsSinceEpoch}',
+    client = MqttServerClient(
+      'broker.emqx.io',
+      'nika_poco_${DateTime.now().millisecondsSinceEpoch}',
     );
 
-    client!.port = 8083;
+    client!.port = 1883; 
     client!.keepAlivePeriod = 20;
+    client!.logging(on: true); 
 
     final connMessage = MqttConnectMessage()
         .withClientIdentifier(client!.clientIdentifier)
@@ -36,14 +37,17 @@ class MqttService extends ChangeNotifier {
     client!.connectionMessage = connMessage;
 
     try {
+      debugPrint('⏳ Підключення до MQTT...');
       await client!.connect();
+      
       if (client!.connectionStatus?.state == MqttConnectionState.connected) {
-        debugPrint('✅ MQTT підключено до smart_event');
+        debugPrint('✅ MQTT підключено успішно!');
         _setupSubscriptions();
         return true;
       }
     } catch (e) {
-      debugPrint('❌ Помилка MQTT: $e');
+      debugPrint('❌ Помилка підключення MQTT: $e');
+      client!.disconnect();
     }
     return false;
   }
@@ -56,6 +60,8 @@ class MqttService extends ChangeNotifier {
       final recMess = messages[0].payload as MqttPublishMessage;
       final payload = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       final topic = messages[0].topic;
+
+      debugPrint('📥 Отримано MQTT: $topic -> $payload');
 
       if (topic.endsWith('people')) {
         crowdCount = payload;

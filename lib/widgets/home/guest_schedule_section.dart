@@ -37,7 +37,7 @@ class _GuestScheduleSectionState extends State<GuestScheduleSection> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
           itemBuilder: (context, index) => _buildModernCard(items[index]),
         );
       },
@@ -50,7 +50,7 @@ class _GuestScheduleSectionState extends State<GuestScheduleSection> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 20, offset: const Offset(0, 8)),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 20, offset: const Offset(0, 8)),
         ],
       ),
       child: ClipRRect(
@@ -94,7 +94,7 @@ class _GuestScheduleSectionState extends State<GuestScheduleSection> {
                 onPressed: () async {
                   if (await _repo.deleteScheduleItem(item.id)) _reload();
                 },
-                icon: Icon(Icons.delete_outline_rounded, color: Colors.red.withOpacity(0.5)),
+                icon: Icon(Icons.delete_outline_rounded, color: Colors.red.withValues(alpha: 0.5)),
               ),
               const SizedBox(width: 8),
             ],
